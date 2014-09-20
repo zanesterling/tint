@@ -10,11 +10,12 @@ $(function() {
 		}
 	}
 
-	for (var i = 0; i < shownRepos.length; i++) {
-		if (!$(shownRepos[j]).hasClass('tintified')) {
-			$(shownRepos[j]).addClass('untinted');
+	shownRepos.each(function (index, elt) {
+		console.log(elt);
+		if (!$(elt).hasClass('tinted')) {
+			$(elt).addClass('untinted');
 		}
-	}
+	});
 
 	$('.repo').click(function(event) {
 		if ($(event.target).hasClass('tinted'))
