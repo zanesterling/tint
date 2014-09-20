@@ -1,9 +1,23 @@
 <head>
 	<title>Tint</title>
+	<link rel=stylesheet href="{{url_for('static', filename='css/welcome.css')}}" type=text/css />
 </head>
 <body>
-	Welcome to Tint!
-	<a href="https://github.com/login/oauth/authorize?scope=user:email&client_id={{ d['client_id'] }}">
-		Click here</a> to begin!
+	<div id=container>
+		<div id=shoutbox>
+			<div id=shoutbox-in>
+				<div id=tintlogo>Tint</div>
+				<div id=login>
+					<a id=ghbuttonlink href="https://github.com/login/oauth/authorize?scope=user:email&client_id={{ d['client_id'] }}">
+						<div id="ghbutton">
+							<div id=connecttext>
+								<img width=50 src={{url_for('static', filename='img/gh-logo.png')}}/><div>Connect to Github</div>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
