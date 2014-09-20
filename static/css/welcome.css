@@ -19,6 +19,7 @@ body {
 	border: 1px solid black;
 	border-radius: 10%;
 	background-color: white;
+	transition: all 0.5s ease-out 0s;
 }
 
 #shoutbox > #shoutbox-in {
@@ -27,6 +28,7 @@ body {
 
 #shoutbox > * {
 	text-align: center;
+	transition: all 0.5s ease-out 0s;
 }
 
 #tintlogo {
@@ -36,12 +38,19 @@ body {
 #ghbutton {
 	width: 300px;
 	height: 100px;
-	background-color: green;
+	background-color: #358cce;
 	border: 1px solid black;
 	border-radius: 10px;
 	display:block;
 	margin-left: auto;
 	margin-right: auto;
+	transition: background-color 0.2s ease-out 0s;
+}
+
+#ghbutton:hover {
+	transition: background-color 0.05s ease-out 0s;
+	background-color: #2475B3;
+
 }
 
 #ghbuttonlink {
