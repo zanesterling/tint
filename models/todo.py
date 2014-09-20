@@ -9,7 +9,7 @@ class Todo():
     line_number = None
     filepath = None
     text = None
-    obj_id = None
+    _id = None
 
     def __init__(self, headline=None, line_number=None, filepath=None, text=None):
         self.headline = headline
@@ -35,3 +35,7 @@ class Todo():
             self._id = db.todos.insert(doc)
         else:  # this doc exists already, update it
             db.todos.update({"_id": self._id}, {"$set": doc})
+    
+    def remove(self):
+        if self._id:
+            db.todos.remove(self._id)
