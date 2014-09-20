@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import requests as pyrequests
+import app_extension
 import secrets
 import json
 import db
@@ -11,7 +12,11 @@ app.secret_key = "blerp derp"
 def home():
 	d = {}
 	d['client_id'] = secrets.client_id
-	d['logged_in'] = 'github_token' in session
+	if not 'github_token' in session:
+		d['logged_in'] = False
+		return render_template("welcome.html", d=d)
+
+	d['logged_in'] = True
 	return render_template("home.html", d=d)
 
 # process github's oauth callback and add user as necessary
@@ -34,6 +39,12 @@ def oauth_callback():
 		else:
 			db.createUser(username, oauth_token)
 
+	return redirect(url_for('home'))
+
+@app.route('/logout')
+def logout():
+	if 'github_token' in session:
+		del session['github_token']
 	return redirect(url_for('home'))
 
 if __name__ == "__main__":
