@@ -11,14 +11,23 @@ class Patch():
     repo = None
 
     def __init__(self, patch_text, filepath, repo):
-        self.raw_patch = patch_text.replace('@@', '\nPatch begins\n').\
+        self.raw_patch = patch_text.replace("@@\n", "\nPatch begins\n")
+        self.raw_patch = self.raw_patch.replace('@@', '\nPatch begins\n').\
             split('\n')[2:]
+
+        idx = 0
+        for line in self.raw_patch:
+            if len(line)==0:
+                line = " "
+                self.raw_patch[idx] = line
+            idx+=1
+
         self.new_version = [line for line in self.raw_patch if line[0] != "-"]
         self.old_version = [line for line in self.raw_patch if line[0] != "+"]
         self.old_version_line_start = int(self.raw_patch[0].replace("-", "").\
-            split(",")[0].strip(" "))-1
+            split(",")[0].strip(" "))
         self.new_version_line_start = int(self.raw_patch[0].replace("+", ",").\
-            split(",")[2])-1
+            split(",")[2])
         self.file_path = filepath
         self.repo = repo
 
@@ -45,9 +54,10 @@ class Patch():
         for key in new_todos:
             ln = new_todos[key].line_number
             fp = new_todos[key].filepath
-            if Todo.get(line_number=ln, filepath=fp, repo=self.repo) is not None:
+            try:
+                Todo.get(line_number=ln, filepath=fp, repo=self.repo)
                 print "Todo already exists"
-            else:
+            except KeyError:
                 new_todos[key].put()
 
         for key in coupled_todos:
@@ -137,5 +147,5 @@ class Patch():
         return deleted_todo_dict
 
     def containsTodo(self, line):
-        if "TODO" in line:
+        if "#TODO" in line:
             return True

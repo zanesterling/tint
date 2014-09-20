@@ -34,6 +34,7 @@ class Commit():
         return json_obj["files"]
 
     def processFile(self, github_file):
+        print github_file['patch']
         patch = Patch(patch_text=github_file['patch'],
                       filepath=github_file['filename'],
                       repo=self.repo)
@@ -41,6 +42,6 @@ class Commit():
 
 commit = Commit(user="shriken",
                 repo="tint",
-                commit_id="53cfdced8ac6a9c2f3b3085a18a381092e30e8a6")
+                commit_id="4ad8c83102bc214ea23cb870cadec8cffa59dd77")
 
 commit.process()
