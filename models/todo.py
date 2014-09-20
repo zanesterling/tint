@@ -21,9 +21,12 @@ class Todo():
     @staticmethod
     def get(line_number, filepath):
         doc = db.todos.find_one({"filepath": filepath, "line_number": line_number})
-        t = Todo(doc['headline'], doc['line_number'], doc['filepath'], doc['text'])
-        t._id = doc['_id']
-        return t
+        if doc:
+            t = Todo(doc['headline'], doc['line_number'], doc['filepath'], doc['text'])
+            t._id = doc['_id']
+            return t
+        else:
+            raise KeyError("No Todo found in the Database with line_number=" + str(line_number) + " and filepath=" + filepath)
 
     def put(self):
         """ Save this todo to the database in a form that Todo.get() """
