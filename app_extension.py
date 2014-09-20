@@ -14,4 +14,5 @@ def getRepos(username, oauth_token):
 		params[attr[0]] = attr[1]
 
 	r = requests.get('https://api.github.com/users/%s/repos' % username, params=params)
+	print r.url
 	return json.loads(r.text)

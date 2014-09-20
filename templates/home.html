@@ -1,10 +1,13 @@
+<!doctype html>
 <head>
 	<title>Tint</title>
+	<script src="{{ url_for('static', filename='js/home.js' }}"></script>
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js//code.jquery.com/jquery-2.1.1.min.js"></script>
 </head>
 <body>
 	<h3>Hey {{ d['username'] }}, you're totally logged in!</h3>
 	{% for repo in d['repos'] %}
-		{{ repo['name'] }}<br>
+		<div class="repo">{{ repo['name'] }}</div><br>
 	{% endfor %}
 	<br>
 	<a href='/logout'>Log Out</a>
