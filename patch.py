@@ -27,7 +27,11 @@ class Patch():
         for key in new_todos:
             new_todos[key].put()
         for key in deleted_todos:
-            deleted_todos[key].remove()
+            ln = deleted_todos[key].line_number
+            fp = deleted_todos[key].filepath
+            todo = Todo.get(line_number=ln, filepath=fp)
+            todo.remove()
+
     def findCoupledTodos(self):
         old_search = {}
         new_search = {}
