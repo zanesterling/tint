@@ -1,0 +1,38 @@
+body {
+	font-family: sans-serif;
+	background-color: grey;
+}
+#container {
+	max-width: calc(50% - 20px);
+	max-height: calc(50% - 20px);
+	border-radius: 10px;
+	background-color: white;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#repolist {
+	max-width: calc(100% - 50px);
+	margin-left: -15px;
+}
+
+.repo {
+	list-style: none;
+	height: 30px;
+	border: 1px solid #136aac;
+	padding-left: 10px;
+	padding-top: 4px;
+	margin-bottom: 4px;
+	border-radius: 2px;
+	box-shadow: 1px 1px 1px 0 #136aac;
+	color: white;
+	background-color: #358cce;
+	transition: all 0.2s ease-out 0s;
+}
+
+.repo:hover {
+	background-color: #2475B3;
+	transition: background-color 0.05s ease-out 0s;
+	cursor: pointer;
+}

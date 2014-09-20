@@ -1,14 +1,18 @@
 <!doctype html>
 <head>
 	<title>Tint</title>
+	<link rel=stylesheet href="{{ url_for('static', filename='css/home.css') }}" type=text/css />
 	<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js//code.jquery.com/jquery-2.1.1.min.js"></script>
 </head>
 <body>
-	<h3>Hey {{ d['username'] }}, you're totally logged in!</h3>
-	{% for repo in d['repos'] %}
-		<div class="repo">{{ repo['name'] }}</div><br>
-	{% endfor %}
-	<br>
-	<a href='/logout'>Log Out</a>
+	<div id=container>
+		<h3>Hey {{ d['username'] }}, you're totally logged in!</h3>
+		<ul id=repolist>
+		{% for repo in d['repos'] %}
+			<li class="repo">{{ repo['name'] }}</li>
+		{% endfor %}
+		</ul>
+		<a href='/logout'>Log Out</a>
+	</div>
 </body>
