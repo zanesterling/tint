@@ -10,7 +10,7 @@ def createUser(username, oauth_token):
 	db.users.insert(user)
 
 def updateUser(username, oauth_token):
-	db.users.update({'username': username}, {'$set': {'oath_token': oauth_token}})
+	db.users.update({'username': username}, {'$set': {'oauth_token': oauth_token}})
 
 def getUser(username):
 	return db.users.find_one({'username': username})

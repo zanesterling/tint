@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import requests as pyrequests
 import secrets
+import json
+import db
 
 app = Flask(__name__)
 app.secret_key = "blerp derp"
@@ -19,10 +21,18 @@ def oauth_callback():
 	data["client_id"] = secrets.client_id
 	data["client_secret"] = secrets.client_secret
 	data["code"] = request.args.get("code")
-	r = pyrequests.post('https://github.com/login/oauth/access_token', data)
-	session['github_token'] = r.text
+	oauth_token = pyrequests.post('https://github.com/login/oauth/access_token', data).text
 
-	# TODO check if user exists already, and if not set up all da jazz
+	# check if user exists already, and update or add them to the db accordingly
+	response = pyrequests.get('https://api.github.com/user?' + oauth_token).text
+	resp_dict = json.loads(response)
+	if 'login' in resp_dict:
+		session['github_token'] = oauth_token
+		username = resp_dict['login']
+		if db.userExists(username):
+			db.updateUser(username, oauth_token)
+		else:
+			db.createUser(username, oauth_token)
 
 	return redirect(url_for('home'))
 
