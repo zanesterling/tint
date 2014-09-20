@@ -1,31 +1,44 @@
 import requests
 import json
 import secrets
+from patch import Patch
 
 
-def commit_processor(user, repo, commit_id):
-    files = getFiles(user=user, repo=repo, commit_id=commit_id)
-    for f in files:
-        processFile(f)
+class Commit():
+    def __init__(self, user, repo, commit_id):
+        self.user = user
+        self.repo = repo
+        self.commit_id = commit_id
 
+    def process(self):
+        fs = self.getFiles(user=self.user,
+                           repo=self.repo,
+                           commit_id=self.commit_id)
+        for f in fs:
+            self.processFile(f)
 
-def getFiles(user=None, repo=None, commit_id=None):
-    url = "https://api.github.com/repos/%(user)s/%(repo)s/commits/%(hash)s"\
-        "?client_id=%(client_id)s&client_secret=%(client_secret)s"\
-        % {"user": user,
-           "repo": repo,
-           "hash": commit_id,
-           "client_id": secrets.client_id,
-           "client_secret": secrets.client_secret}
+    def getFiles(self, user=None, repo=None, commit_id=None):
+        '''Grabs changed files using the github\
+            api for this particular user'''
 
-    request = requests.get(url)
-    json_obj = json.loads(request.text)
-    return json_obj["files"]
+        url = "https://api.github.com/repos/%(user)s/%(repo)s/commits/%(hash)s"\
+            "?client_id=%(client_id)s&client_secret=%(client_secret)s"\
+            % {"user": user,
+                "repo": repo,
+                "hash": commit_id,
+                "client_id": secrets.client_id,
+                "client_secret": secrets.client_secret}
+        print url
+        request = requests.get(url)
+        json_obj = json.loads(request.text)
+        return json_obj["files"]
 
+    def processFile(self, github_file):
+        patch = Patch(github_file['patch'])
+        patch.addTodo()
 
-def processFile(github_file):
-    print github_file['patch']
+commit = Commit(user="shriken",
+                repo="tint",
+                commit_id="a15d426e38f01c3a1ae2e796530f562ef84dfd72")
 
-commit_processor(user="Prinzhorn",
-                 repo="skrollr",
-                 commit_id="5bf8668b413232f49d19387a3931f0b421971efe")
+commit.process()
