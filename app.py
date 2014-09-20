@@ -52,5 +52,10 @@ def logout():
 		del session['username']
 	return redirect(url_for('home'))
 
+@app.route('/client-callback')
+def clientCallback():
+	if request.args.get('action') == 'tint':
+		tintRepo(request.args.['username'], session['oauth_token'], request.args.['repo'])
+
 if __name__ == "__main__":
 	app.run("0.0.0.0", debug=True)

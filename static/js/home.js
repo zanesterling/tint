@@ -9,4 +9,23 @@ $.ready(function() {
 			}
 		}
 	}
+
+	$('.repo').click(function() {
+		alert("asdf");
+		if ($(event.target).hasClass('tintified'))
+			return;
+
+		$(event.target).addClass('tinting');
+		$.post(window.location.origin + '/client-callback',
+			{
+				'action': 'tint',
+				'username': $('#username').text(),
+				'repo': $(event.target).val()
+			},
+			function() {
+				$(event.target).addClass('tinted');
+				$(event.target).removeClass('tinting');
+			}
+		);
+	});
 });

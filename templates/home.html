@@ -2,8 +2,9 @@
 <head>
 	<title>Tint</title>
 	<link rel=stylesheet href="{{ url_for('static', filename='css/home.css') }}" type=text/css />
+	<div id="username" style='display: none;'>{{ d['username'] }}</div>
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="{{ url_for('static', filename='js/home.js') }}"></script>
-	<script src="https://code.jquery.com/jquery-2.1.1.min.js//code.jquery.com/jquery-2.1.1.min.js"></script>
 </head>
 <body>
 	<div id=container>
