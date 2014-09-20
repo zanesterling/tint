@@ -1,5 +1,6 @@
 *.pyc
 *.swp
 *.swo
-
+.ropeproject/
+*.ropeproject
 secrets.py
