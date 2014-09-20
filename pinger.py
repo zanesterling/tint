@@ -1,20 +1,19 @@
-import urllib2
 import json
-
-# send an example push message to localhost
-urllib2.urlopen("http://localhost:5000", 
-json.dumps({
+import requests
+url = 'http://localhost:5000'
+payload = json.loads('''
+{
   "ref": "refs/heads/gh-pages",
   "after": "4d2ab4e76d0d405d17d1a0f2b8a6071394e3ab40",
   "before": "993b46bdfc03ae59434816829162829e67c4d490",
-  "created": False,
-  "deleted": False,
-  "forced": False,
+  "created": false,
+  "deleted": false,
+  "forced": false,
   "compare": "https://github.com/baxterthehacker/public-repo/compare/993b46bdfc03...4d2ab4e76d0d",
   "commits": [
     {
       "id": "4d2ab4e76d0d405d17d1a0f2b8a6071394e3ab40",
-      "distinct": True,
+      "distinct": true,
       "message": "Trigger pages build",
       "timestamp": "2014-07-25T12:37:40-04:00",
       "url": "https://github.com/baxterthehacker/public-repo/commit/4d2ab4e76d0d405d17d1a0f2b8a6071394e3ab40",
@@ -41,7 +40,7 @@ json.dumps({
   ],
   "head_commit": {
     "id": "4d2ab4e76d0d405d17d1a0f2b8a6071394e3ab40",
-    "distinct": True,
+    "distinct": true,
     "message": "Trigger pages build",
     "timestamp": "2014-07-25T12:37:40-04:00",
     "url": "https://github.com/baxterthehacker/public-repo/commit/4d2ab4e76d0d405d17d1a0f2b8a6071394e3ab40",
@@ -73,10 +72,10 @@ json.dumps({
       "name": "baxterthehacker",
       "email": "baxterthehacker@users.noreply.github.com"
     },
-    "private": False,
+    "private": false,
     "html_url": "https://github.com/baxterthehacker/public-repo",
     "description": "",
-    "fork": False,
+    "fork": false,
     "url": "https://github.com/baxterthehacker/public-repo",
     "forks_url": "https://api.github.com/repos/baxterthehacker/public-repo/forks",
     "keys_url": "https://api.github.com/repos/baxterthehacker/public-repo/keys{/key_id}",
@@ -120,16 +119,16 @@ json.dumps({
     "ssh_url": "git@github.com:baxterthehacker/public-repo.git",
     "clone_url": "https://github.com/baxterthehacker/public-repo.git",
     "svn_url": "https://github.com/baxterthehacker/public-repo",
-    "homepage": None,
+    "homepage": null,
     "size": 612,
     "stargazers_count": 0,
     "watchers_count": 0,
-    "language": None,
-    "has_issues": True,
-    "has_downloads": True,
-    "has_wiki": True,
+    "language": null,
+    "has_issues": true,
+    "has_downloads": true,
+    "has_wiki": true,
     "forks_count": 0,
-    "mirror_url": None,
+    "mirror_url": null,
     "open_issues_count": 25,
     "forks": 0,
     "open_issues": 25,
@@ -142,5 +141,7 @@ json.dumps({
     "name": "baxterthehacker",
     "email": "baxterthehacker@users.noreply.github.com"
   }
-}))
+}''')
 
+headers = {'content-type': 'application/json', 'accept': 'text/plain'}
+r = requests.post(url, data = json.dumps(payload), headers = headers)
