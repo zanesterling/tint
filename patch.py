@@ -26,7 +26,8 @@ class Patch():
         coupled_todos = self.findCoupledTodos()
         for key in new_todos:
             new_todos[key].put()
-
+        for key in deleted_todos:
+            deleted_todos[key].remove()
     def findCoupledTodos(self):
         old_search = {}
         new_search = {}

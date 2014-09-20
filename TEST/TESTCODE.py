@@ -24,8 +24,6 @@ class ScrapeFriends(Handler):
         timedelta = now - last_scraped
         print("This is a test to see what happens with newlines \n")
 
-        #TODO test#1
-
         #TODO determine if we really want to scrape the person
         if timedelta.total_seconds() > 0:
             request_string = 'https://graph.facebook.com/' + id + '/friends?access_token=' + token
