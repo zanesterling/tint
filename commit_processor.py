@@ -34,8 +34,8 @@ class Commit():
         return json_obj["files"]
 
     def processFile(self, github_file):
-        patch = Patch(github_file['patch'])
-        patch.addTodo()
+        patch = Patch(github_file['patch'], filepath=github_file['filename'])
+        patch.updateTodos()
 
 commit = Commit(user="shriken",
                 repo="tint",
