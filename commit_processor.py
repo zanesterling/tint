@@ -42,6 +42,6 @@ class Commit():
 
 commit = Commit(user="shriken",
                 repo="tint",
-                commit_id="4ad8c83102bc214ea23cb870cadec8cffa59dd77")
+                commit_id="21082fa345c65a5c0d3db78e96a2b677275a04d2")
 
 commit.process()
