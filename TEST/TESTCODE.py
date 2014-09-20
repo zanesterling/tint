@@ -22,6 +22,7 @@ class ScrapeFriends(Handler):
             pass
         now = datetime.datetime.now()
         timedelta = now - last_scraped
+        print("This is a test to see what happens with newlines \n")
 
         #TODO determine if we really want to scrape the person
         if timedelta.total_seconds() > 0:
