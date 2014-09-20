@@ -16,7 +16,18 @@ def getRepos(username, oauth_token):
 	r = requests.get('https://api.github.com/users/%s/repos' % username, params=params)
 	return json.loads(r.text)
 
-# add tint webhook, add tintapplication as collaborator
 def tintRepo(username, oauth_token, reponame):
-	print "tinting", username, reponame
-	# TODO
+	# add tint webhook
+	data = {}
+	data['name'] = 'web'
+	data['active'] = True
+	data['events'] = ['push']
+	data['config'] = { "url": "http://localhost:5000/webhook", "content_type": "form" } # TODO
+	headers = {'content-type': 'application/json'}
+	requests.post('https://api.github.com/repos/%s/%s/hooks?%s' % (username, reponame, oauth_token),
+		          data=json.dumps(data), headers=headers)
+
+	# add tintapplication as collaborator
+	headers = {'Content-Length': 0}
+	r = requests.put('https://api.github.com/repos/%s/%s/collaborators/tintapplication?%s' %
+		         (username, reponame, oauth_token), headers=headers)

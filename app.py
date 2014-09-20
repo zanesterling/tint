@@ -58,5 +58,9 @@ def clientCallback():
 		tintRepo(request.args['username'], session['oauth_token'], request.args['repo'])
 	return '{"status": "success"}'
 
+@app.route('/webhook')
+def webhook():
+	return "" # TODO process the commits
+
 if __name__ == "__main__":
 	app.run("0.0.0.0", debug=True)
