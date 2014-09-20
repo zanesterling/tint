@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+from app_extension import *
 import requests as pyrequests
-import app_extension
 import secrets
 import json
 import db
@@ -17,6 +17,8 @@ def home():
 		return render_template("welcome.html", d=d)
 
 	d['logged_in'] = True
+	d['username'] = session['username']
+	d['repos'] = getRepos(session['username'], session['github_token'])
 	return render_template("home.html", d=d)
 
 # process github's oauth callback and add user as necessary
@@ -34,6 +36,7 @@ def oauth_callback():
 	if 'login' in resp_dict:
 		session['github_token'] = oauth_token
 		username = resp_dict['login']
+		session['username'] = username
 		if db.userExists(username):
 			db.updateUser(username, oauth_token)
 		else:
@@ -45,6 +48,8 @@ def oauth_callback():
 def logout():
 	if 'github_token' in session:
 		del session['github_token']
+	if 'username' in session:
+		del session['username']
 	return redirect(url_for('home'))
 
 if __name__ == "__main__":

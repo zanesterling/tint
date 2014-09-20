@@ -2,6 +2,10 @@
 	<title>Tint</title>
 </head>
 <body>
-	Hey dude, you're totally logged in!
+	<h3>Hey {{ d['username'] }}, you're totally logged in!</h3>
+	{% for repo in d['repos'] %}
+		{{ repo['name'] }}<br>
+	{% endfor %}
+	<br>
 	<a href='/logout'>Log Out</a>
 </body>
