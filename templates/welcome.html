@@ -8,7 +8,7 @@
 			<div id=shoutbox-in>
 				<div id=tintlogo>Tint</div>
 				<div id=login>
-					<a id=ghbuttonlink href="https://github.com/login/oauth/authorize?scope=user:email&client_id={{ d['client_id'] }}">
+					<a id=ghbuttonlink href="https://github.com/login/oauth/authorize?scope=user:email,admin:repo_hook,repo&client_id={{ d['client_id'] }}">
 						<div id="ghbutton">
 							<div id=connecttext>
 								<img width=50 src={{url_for('static', filename='img/gh-logo.png')}}/><div>Connect to Github</div>
