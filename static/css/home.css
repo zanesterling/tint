@@ -36,3 +36,30 @@ body {
 	transition: background-color 0.05s ease-out 0s;
 	cursor: pointer;
 }
+
+/* we are currently checking if this repo is set up with tint */
+.tinting {
+    background-color: yellow;
+}
+
+.tinting:hover {
+    background-color: orange;
+}
+
+/* this repo is set up with tint */
+.tinted {
+    background-color: green;
+}
+
+.tinted:hover {
+    background-color: darkgreen;
+}
+
+/* this repo is not set up with tint */
+.untinted {
+	background-color: #358cce;
+}
+
+.untinted:hover {
+	background-color: #2475B3;
+}
