@@ -26,26 +26,36 @@ class Todo():
                    "text": self.text,
                    "id": self._id}
 
-    def __init__(self, headline=None, line_number=None, filepath=None,
-                 text=None, repo=None):
+    def __init__(self, headline=None,
+                 line_number=None,
+                 filepath=None,
+                 text=None,
+                 repo=None,
+                 account=None,
+                 committed_by=None):
         self.headline = headline
         self.line_number = line_number
         self.filepath = filepath
         self.text = text
         self.repo = repo
+        self.committed_by = committed_by
+        self.account = acount
 
     # Get and set for mongodb
     @staticmethod
-    def get(line_number, filepath, repo):
+    def get(line_number, filepath, repo, account, committed_by):
         doc = db.todos.find_one({"filepath": filepath,
                                  "line_number": line_number,
-                                 "repo": repo})
+                                 "repo": repo,
+                                 "account": account})
         if doc:
             t = Todo(doc['headline'],
                      doc['line_number'],
                      doc['filepath'],
                      doc['text'],
-                     doc['repo'])
+                     doc['repo'],
+                     doc['account'],
+                     doc['committed_by'])
             t._id = doc['_id']
             return t
         else:
@@ -57,7 +67,9 @@ class Todo():
 		"line_number": self.line_number,\
 		"text": self.text,			  \
                 "headline": self.headline,
-                "repo":self.repo}
+                "repo":self.repo,
+                "account":self.account,
+                "committed_by":self.committed_by}
         if not self._id:
             self._id = db.todos.insert(doc)
         else:  # this doc exists already, update it

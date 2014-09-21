@@ -95,6 +95,8 @@ class Patch():
                 index = self.findTodo(line)
                 todo_text = line[index:]
                 new_todo = Todo(headline=todo_text,
+                                committed_by=self.committed_by,
+                                account = self.account,
                                 line_number=new_idx,
                                 filepath=self.file_path,
                                 text=todo_text,
@@ -107,6 +109,8 @@ class Patch():
                 index = self.findTodo(line)
                 todo_text = line[index:]
                 old_todo = Todo(headline=todo_text,
+                                committed_by=self.committed_by,
+                                account = self.account,
                                 line_number=old_idx,
                                 filepath=self.file_path,
                                 text=todo_text,
@@ -130,6 +134,8 @@ class Patch():
                 index = self.findTodo(line)
                 todo_text = line[index:]
                 new_todo = Todo(headline=todo_text,
+                                committed_by=self.committed_by,
+                                account = self.account,
                                 line_number=idx,
                                 filepath=self.file_path,
                                 text=todo_text,
@@ -146,10 +152,12 @@ class Patch():
                 index = self.findTodo(line)
                 todo_text = line[index:]
                 deleted_todo = Todo(headline=todo_text,
-                                line_number=idx,
-                                filepath=self.file_path,
-                                text=todo_text,
-                                repo=self.repo
+                                    committed_by=self.committed_by,
+                                    account = self.account,
+                                    line_number=idx,
+                                    filepath=self.file_path,
+                                    text=todo_text,
+                                    repo=self.repo
                                     )
                 deleted_todo_dict[idx] = deleted_todo
             idx+=1
@@ -171,4 +179,3 @@ class Patch():
             if sliced.startswith('TODO:'):
                 return len(line) - len(sliced)
         return None;
-
