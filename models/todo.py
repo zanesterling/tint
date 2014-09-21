@@ -89,8 +89,8 @@ class Todo():
 
     def remove(self):
         if self._id:
-            number = db.todos.find_one({"_id": self._id}).issue_number
-            Issue.remove(issue_number=issue_number,
+            number = db.todos.find_one({"_id": self._id})["issue_number"]
+            issues.Issue.remove(issue_number=number,
                          account=self.account,
                          repo=self.repo)
             db.todos.remove(self._id)

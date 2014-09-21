@@ -36,9 +36,11 @@ class Issue():
 
     @staticmethod
     def remove(issue_number, account, repo):
-        url = '''https://api.github.com/repos/%(act)s/%(repo)s/issues?%(token)s'''\
-            %{"token":self.access_token,
+        url = '''https://api.github.com/repos/%(act)s/%(repo)s/issues/%(number)s?%(token)s'''\
+            %{"token":db.getToken("tintapplication"),
               "act": account,
-              "repo": repo}
+              "repo": repo,
+              "number": issue_number}
         payload = {'state':'closed'}
         response = requests.post(url, data=json.dumps(payload))
+        return response
