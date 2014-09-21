@@ -68,7 +68,7 @@ def webhook():
 	print payload
 	if len(payload['commits']) <= 20:
 		for commit in payload['commits']:
-			Commit(commit['author']['username'], payload['repository']['name'], commit['id']).process()
+			Commit(payload['repository']['owner']['name'], payload['repository']['name'], commit['id']).process()
 	return ""
 
 if __name__ == "__main__":
