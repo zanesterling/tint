@@ -59,7 +59,8 @@ class Todo():
                      doc['text'],
                      doc['repo'],
                      doc['account'],
-                     doc['committed_by'])
+                     doc['committed_by'],
+                     doc['issue_number'])
             t._id = doc['_id']
             return t
         else:
@@ -99,14 +100,16 @@ class Todo():
                                        "account": self.account})
             neighbor_list = []
             for neighbor in neighbors:
-                neighbor_list.append(Todo(neighbor['headline'],
-                                        neighbor['line_number'],
-                                        neighbor['filepath'],
-                                        neighbor['text'],
-                                        neighbor['repo'],
-                                        neighbor['account'],
-                                        neighbor['committed_by']))
-
+                new = Todo(neighbor['headline'],
+                        neighbor['line_number'],
+                        neighbor['filepath'],
+                        neighbor['text'],
+                        neighbor['repo'],
+                        neighbor['account'],
+                        neighbor['committed_by'],
+                        neighbor['issue_number'])
+                new._id = neighbor['_id']
+                neighbor_list.append(new)
             for n in neighbor_list:
                 if n.line_number > self.line_number:
                     n.line_number+=-1
