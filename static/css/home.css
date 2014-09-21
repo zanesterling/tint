@@ -89,7 +89,7 @@ body {
 }
 
 .untinting:hover {
-    background-color: brown;
+    background-color: darkorange;
 }
 
 .untinting > .reponame:after {
