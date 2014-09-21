@@ -17,7 +17,7 @@
 	</ol>
 		<ul id=repolist>
 		{% for repo in d['repos'] %}
-			<li class="repo">{{ repo['name'] }}</li>
+		<li class="repo"><span class=reponame>{{ repo['name'] }}</span></li>
 		{% endfor %}
 		</ul>
 		<a href='/logout'>Log Out</a>

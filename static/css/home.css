@@ -37,6 +37,12 @@ body {
 	cursor: pointer;
 }
 
+/* generic styling for the tinted status messages */
+.repo > .reponame:after{
+    color: #EEE;
+    font-size: 70%;
+}
+
 /* we are currently checking if this repo is set up with tint */
 .tinting {
     background-color: yellow;
@@ -44,6 +50,10 @@ body {
 
 .tinting:hover {
     background-color: orange;
+}
+
+.tinting > .reponame:after {
+    content: " (Tinting...)";
 }
 
 /* this repo is set up with tint */
@@ -55,6 +65,10 @@ body {
     background-color: darkgreen;
 }
 
+.tinted > .reponame:after {
+    content: " (Tinted!)";
+}
+
 /* this repo is not set up with tint */
 .untinted {
 	background-color: #358cce;
@@ -62,4 +76,8 @@ body {
 
 .untinted:hover {
 	background-color: #2475B3;
+}
+
+.untinted > .reponame:after {
+    content: " (Not Tinted)";
 }
