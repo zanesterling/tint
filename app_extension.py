@@ -1,0 +1,33 @@
+import requests
+import secrets
+import json
+import db
+
+def getRepos(username, oauth_token):
+	params = {}
+	params['type'] = 'owner'
+	params['client_id'] = secrets.client_id
+	params['client_secret'] = secrets.client_secret
+
+	for attr in oauth_token.split('&'):
+		attr = attr.split('=')
+		params[attr[0]] = attr[1]
+
+	r = requests.get('https://api.github.com/users/%s/repos' % username, params=params)
+	return json.loads(r.text)
+
+def tintRepo(username, oauth_token, reponame):
+	# add tint webhook
+	data = {}
+	data['name'] = 'web'
+	data['active'] = True
+	data['events'] = ['push']
+	data['config'] = { "url": "http://localhost:5000/webhook", "content_type": "form" } # TODO
+	headers = {'content-type': 'application/json'}
+	requests.post('https://api.github.com/repos/%s/%s/hooks?%s' % (username, reponame, oauth_token),
+		          data=json.dumps(data), headers=headers)
+
+	# add tintapplication as collaborator
+	headers = {'Content-Length': 0}
+	r = requests.put('https://api.github.com/repos/%s/%s/collaborators/tintapplication?%s' %
+		         (username, reponame, oauth_token), headers=headers)

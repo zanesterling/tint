@@ -1,9 +1,25 @@
+<!doctype html>
 <head>
 	<title>Tint</title>
+	<link rel=stylesheet href="{{ url_for('static', filename='css/home.css') }}" type=text/css />
+	<div id="username" style='display: none;'>{{ d['username'] }}</div>
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </head>
 <body>
-	Welcome to Tint!
-	<a href="https://github.com/login/oauth/authorize?scope=user:email&client_id={{ d['client-id'] }}">
-		Click here</a> to begin!
+	<div id=container>
+	<h3>Hey {{ d['username'] }},</h3>
+	<p>just click the repos you'd like to Tint!</p>
+	<p>We'll be automatically doing two things to those repos:</p>
+	<ol>
+			<li>We'll add a Webhook to notify Tint whenever anything is pushed to the repo.</li>
+			<li>We'll add <a href=http://github.com/tintapplication>@tintapplication</a> as a collaborator to the repo. He'll create and close issues as you create and delete <code>TODO:</code> lines.</li>
+	</ol>
+		<ul id=repolist>
+		{% for repo in d['repos'] %}
+		<li class="repo"><span class=reponame>{{ repo['name'] }}</span></li>
+		{% endfor %}
+		</ul>
+		<a href='/logout'>Log Out</a>
+	</div>
 </body>
-

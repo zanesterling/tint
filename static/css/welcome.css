@@ -1,0 +1,71 @@
+body {
+	font-family: sans-serif;
+	background-color: grey;
+}
+
+#container {
+	width: 100%;
+	height: 100%;
+}
+
+#shoutbox {
+	height: 300px;
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10%;
+	border: 1px solid black;
+	border-radius: 10%;
+	background-color: white;
+	transition: all 0.5s ease-out 0s;
+}
+
+#shoutbox > #shoutbox-in {
+	margin-top: 10%;
+}
+
+#shoutbox > * {
+	text-align: center;
+	transition: all 0.5s ease-out 0s;
+}
+
+#tintlogo {
+	font-size: 84px;
+}
+
+#ghbutton {
+	width: 300px;
+	height: 100px;
+	background-color: #358cce;
+	border: 1px solid black;
+	border-radius: 10px;
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	transition: background-color 0.2s ease-out 0s;
+}
+
+#ghbutton:hover {
+	transition: background-color 0.05s ease-out 0s;
+	background-color: #2475B3;
+
+}
+
+#ghbuttonlink {
+	color:white;
+	text-decoration: none;
+}
+
+#connecttext {
+}
+#connecttext > div {
+	margin-left: 30px;
+	margin-top: -40px;
+	font-size: 25px;
+	display: block;
+}
+#connecttext > img {
+	margin-left:20px;
+	margin-top: 25px;
+	display: block;
+}
