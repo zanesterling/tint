@@ -64,11 +64,12 @@ class Patch():
         for key in new_todos:
             ln = new_todos[key].line_number
             fp = new_todos[key].filepath
+            assignee = new_todos[key].assignee
             try:
                 Todo.get(line_number=ln, filepath=fp,
                          repo=self.repo, account=self.account,
                          committed_by=self.committed_by,
-                         assignee=self.assignee)
+                         assignee=assignee)
                 print "Todo already exists"
             except KeyError:
                 new_todos[key].put()
