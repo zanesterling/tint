@@ -10,11 +10,10 @@
 	<div id=container>
 	<h3>Hey {{ d['username'] }},</h3>
 	<p>Just click the repos you'd like to Tint!</p>
-	<p>We'll be automatically doing three things to those repos:</p>
+	<p>We'll be automatically doing three two to those repos:</p>
 	<ol>
 			<li>We'll add a Webhook to notify Tint whenever anything is pushed to the repo.</li>
 			<li>We'll add <a href=http://github.com/tintapplication>@tintapplication</a> as a collaborator to the repo. He'll create and close issues as you create and delete <code>TODO:</code> lines.</li>
-			<li>Whenever someone commits to the repo, Github will send us a notification. Our bot will then look through the changes to see if any <code>TODO:</code>s were created or deleted, and open or close the issue tied to that <code>TODO</code>.</li>
 	</ol>
 		<ul id=repolist>
 		{% for repo in d['repos'] %}
