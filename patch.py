@@ -148,7 +148,7 @@ class Patch():
         return new_todo_dict
 
     def findDeletedTodos(self):
-        idx = self.old_version_line_start - 2
+        idx = self.old_version_line_start
         deleted_todo_dict = {}
         for line in self.old_version:
             if line[0]=="-" and self.containsTodo(line):
