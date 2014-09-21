@@ -43,8 +43,10 @@ class Commit():
                       committed_by=committed_by)
         patch.updateTodos()
 
-commit = Commit(user="shriken",
-                repo="tint",
-                commit_id="37ca5334eca572479b235e1305601b6b2f35f824")
 
-commit.process()
+if __name__=="__main__":
+    commit = Commit(user="shriken",
+                    repo="tint",
+                    commit_id="bc403174464d281ef222afe986875bd30fb32dbc")
+
+    commit.process()
