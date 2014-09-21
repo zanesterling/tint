@@ -19,7 +19,7 @@ This is some shitty-ass coding.
 
 
 
-#TODO Final test of server:
+#TODO Final test of server
 
 
 

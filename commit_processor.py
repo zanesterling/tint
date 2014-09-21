@@ -47,6 +47,6 @@ class Commit():
 if __name__=="__main__":
     commit = Commit(user="shriken",
                     repo="tint",
-                    commit_id="461574c8999a14d97ffa1b91d169d192ec96e854")
+                    commit_id="34f924050a9e0c9581d1895a3651747c8687e4bb")
 
     commit.process()
