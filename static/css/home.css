@@ -19,10 +19,10 @@ body {
 
 .repo {
 	list-style: none;
-	height: 30px;
+	height: 26px;
 	border: 1px solid #136aac;
 	padding-left: 10px;
-	padding-top: 4px;
+	padding-top: 10px;
 	margin-bottom: 4px;
 	border-radius: 2px;
 	box-shadow: 1px 1px 1px 0 #136aac;
@@ -37,6 +37,12 @@ body {
 	cursor: pointer;
 }
 
+/* generic styling for the tinted status messages */
+.repo > .reponame:after{
+    color: #EEE;
+    font-size: 70%;
+}
+
 /* we are currently checking if this repo is set up with tint */
 .tinting {
     background-color: yellow;
@@ -44,6 +50,10 @@ body {
 
 .tinting:hover {
     background-color: orange;
+}
+
+.tinting > .reponame:after {
+    content: " (Tinting...)";
 }
 
 /* this repo is set up with tint */
@@ -55,6 +65,10 @@ body {
     background-color: darkgreen;
 }
 
+.tinted > .reponame:after {
+    content: " (Tinted!)";
+}
+
 /* this repo is not set up with tint */
 .untinted {
 	background-color: #358cce;
@@ -62,4 +76,8 @@ body {
 
 .untinted:hover {
 	background-color: #2475B3;
+}
+
+.untinted > .reponame:after {
+    content: " (Not Tinted)";
 }
