@@ -5,6 +5,9 @@
 	<div id="username" style='display: none;'>{{ d['username'] }}</div>
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+	{% if session["klingon"] %}
+	{% include "klingoninclude.html" %}
+	{% endif %}
 </head>
 <body>
 	<div id=container>

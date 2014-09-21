@@ -71,5 +71,13 @@ def webhook():
 			Commit(payload['repository']['owner']['name'], payload['repository']['name'], commit['id']).process()
 	return ""
 
+@app.route('/easter/klingon')
+def klingon():
+    if 'klingon' in session:
+	session.pop('klingon')
+    else:
+	session['klingon'] = True
+    return redirect(url_for('home'))
+
 if __name__ == "__main__":
 	app.run("0.0.0.0", debug=True)

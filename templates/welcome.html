@@ -1,6 +1,9 @@
 <head>
 	<title>Tint</title>
 	<link rel=stylesheet href="{{url_for('static', filename='css/welcome.css')}}" type=text/css />
+	{% if session["klingon"] %}
+	{% include "klingoninclude.html" %}
+	{% endif %}
 </head>
 <body>
 	<div id=container>
