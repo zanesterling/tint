@@ -35,7 +35,8 @@ class Todo():
                  repo=None,
                  account=None,
                  committed_by=None,
-                 issue_number=None):
+                 issue_number=None,
+                 assignee=None):
         self.headline = headline
         self.line_number = line_number
         self.filepath = filepath
@@ -44,6 +45,7 @@ class Todo():
         self.committed_by = committed_by
         self.account = account
         self.issue_number = issue_number
+        self.assignee = assignee
 
     # Get and set for mongodb
     @staticmethod
@@ -60,7 +62,8 @@ class Todo():
                      doc['repo'],
                      doc['account'],
                      doc['committed_by'],
-                     doc['issue_number'])
+                     doc['issue_number'],
+                     doc['assignee'])
             t._id = doc['_id']
             return t
         else:
@@ -75,10 +78,12 @@ class Todo():
                "headline": self.headline,
                "repo": self.repo,
                "account": self.account,
-               "committed_by": self.committed_by}
+               "committed_by": self.committed_by,
+               "assignee": self.assignee}
         if not self._id:
             issue = issues.Issue(title=self.headline,
-                                 body=self.text)
+                                 body=self.text,
+                                 assignee=self.assignee)
 
             self.issue_number = issue.set(account=self.account, repo=self.repo)
             doc["issue_number"]= self.issue_number
@@ -107,7 +112,8 @@ class Todo():
                         neighbor['repo'],
                         neighbor['account'],
                         neighbor['committed_by'],
-                        neighbor['issue_number'])
+                        neighbor['issue_number'],
+                        neighbor['assignee'])
                 new._id = neighbor['_id']
                 neighbor_list.append(new)
             for n in neighbor_list:

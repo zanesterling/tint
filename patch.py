@@ -67,7 +67,8 @@ class Patch():
             try:
                 Todo.get(line_number=ln, filepath=fp,
                          repo=self.repo, account=self.account,
-                         committed_by=self.committed_by)
+                         committed_by=self.committed_by,
+                         assignee=self.assignee)
                 print "Todo already exists"
             except KeyError:
                 new_todos[key].put()
@@ -136,13 +137,20 @@ class Patch():
             if line[0]=="+" and self.containsTodo(line):
                 index = Patch.findTodo(line)
                 todo_text = line[index:]
+
+				# find assignee tag
+                body = line[line.index("TODO") + 6:]
+                if body[0] == "@":
+                	assignee = body[:body.index(' ')]
+
                 new_todo = Todo(headline=todo_text,
                                 committed_by=self.committed_by,
                                 account = self.account,
                                 line_number=idx,
                                 filepath=self.file_path,
                                 text=todo_text,
-                                repo=self.repo)
+                                repo=self.repo,
+                                assignee=assignee)
                 new_todo_dict[idx] = new_todo
             idx += 1
         return new_todo_dict
