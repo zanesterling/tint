@@ -1,3 +1,4 @@
+import requests
 
 class Issue():
     title = None #Required. The title of the issue.
@@ -15,6 +16,5 @@ class Issue():
     def get():
         pass
 
-    def set():
-        pass
-
+    def set(access_token):
+        request = '''https://api.github.com/repos/Shriken/tint/issues'''

@@ -9,11 +9,16 @@ class Patch():
     new_version_line_start = None
     old_version_line_start = None
     repo = None
+    account = None
+    committed_by = None
 
-    def __init__(self, patch_text, filepath, repo):
+    def __init__(self, patch_text, filepath, repo, account, committed_by):
         self.raw_patch = patch_text.replace("@@\n", "\nPatch begins\n")
         self.raw_patch = self.raw_patch.replace('@@', '\nPatch begins\n').\
             split('\n')[2:]
+
+        self.account = account
+        self.committed_by = committed_by
 
         idx = 0
         for line in self.raw_patch:
@@ -22,8 +27,8 @@ class Patch():
                 self.raw_patch[idx] = line
             idx+=1
 
-        self.new_version = [line for line in self.raw_patch if line[0] != "-"]
-        self.old_version = [line for line in self.raw_patch if line[0] != "+"]
+        self.new_version = [l for l in self.raw_patch if line[0] != "-"]
+        self.old_version = [l for l in self.raw_patch if line[0] != "+"]
         self.old_version_line_start = int(self.raw_patch[0].replace("-", "").\
             split(",")[0].strip(" "))
         self.new_version_line_start = int(self.raw_patch[0].replace("+", ",").\
@@ -45,7 +50,9 @@ class Patch():
             ln = deleted_todos[key].line_number
             fp = deleted_todos[key].filepath
             try:
-                todo = Todo.get(line_number=ln, filepath=fp, repo=self.repo)
+                todo = Todo.get(line_number=ln, filepath=fp,
+                                repo=self.repo, account=self.account,
+                                committed_by=self.committed_by)
                 todo.remove()
             except KeyError, e:
                 print e.message
@@ -55,7 +62,9 @@ class Patch():
             ln = new_todos[key].line_number
             fp = new_todos[key].filepath
             try:
-                Todo.get(line_number=ln, filepath=fp, repo=self.repo)
+                Todo.get(line_number=ln, filepath=fp,
+                         repo=self.repo, account=self.account,
+                         committed_by=self.committed_by)
                 print "Todo already exists"
             except KeyError:
                 new_todos[key].put()
@@ -65,7 +74,7 @@ class Patch():
                 ln = key[0]
                 fp = coupled_todos[key][0].filepath
                 try:
-                    todo = Todo.get(line_number=ln, filepath=fp, repo=self.repo)
+                    todo = Todo.get(line_number=ln, filepath=fp, repo=self.repo, account=self.account, committed_by=self.committed_by)
                     todo.line_number = key[1]
                     todo.filepath = coupled_todos[key][1].filepath
                     todo.put()
