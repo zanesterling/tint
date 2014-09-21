@@ -7,7 +7,6 @@ body {
     margin-top: 40px;
 	max-width: calc(50% - 20px);
 	max-height: calc(50% - 20px);
-	border-radius: 10px;
 	background-color: rgba(180, 180, 180, .5);
 	padding: 10px;
 	margin-left: auto;
