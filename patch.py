@@ -19,7 +19,6 @@ class Patch():
 
         self.account = account
         self.committed_by = committed_by
-
         idx = 0
         for line in self.raw_patch:
             if len(line)==0:
@@ -27,8 +26,8 @@ class Patch():
                 self.raw_patch[idx] = line
             idx+=1
 
-        self.new_version = [l for l in self.raw_patch if line[0] != "-"]
-        self.old_version = [l for l in self.raw_patch if line[0] != "+"]
+        self.new_version = [l for l in self.raw_patch if l[0] != "-"]
+        self.old_version = [l for l in self.raw_patch if l[0] != "+"]
         self.old_version_line_start = int(self.raw_patch[0].replace("-", "").\
             split(",")[0].strip(" "))
         self.new_version_line_start = int(self.raw_patch[0].replace("+", ",").\
