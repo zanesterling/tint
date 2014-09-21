@@ -42,11 +42,11 @@ class Patch():
     def updateTodos(self):
         new_todos = self.findNewTodos()
         deleted_todos = self.findDeletedTodos()
-        coupled_todos = self.findCoupledTodos()
+        #coupled_todos = self.findCoupledTodos()
 
         print new_todos
         print deleted_todos
-        print coupled_todos
+        #print coupled_todos
 
 
         for key in deleted_todos:
@@ -71,7 +71,7 @@ class Patch():
                 print "Todo already exists"
             except KeyError:
                 new_todos[key].put()
-
+        '''
         for key in coupled_todos:
             if True:
                 ln = key[0]
@@ -84,7 +84,7 @@ class Patch():
                 except KeyError:
                     print "No such todo found. Making one now."
                     coupled_todos[key][1].put()
-
+        '''
 
     def findCoupledTodos(self):
         old_search = {}

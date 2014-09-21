@@ -94,4 +94,21 @@ class Todo():
                          account=self.account,
                          repo=self.repo)
             db.todos.remove(self._id)
+            neighbors = db.todos.find({"filepath": self.filepath,
+                                       "repo": self.repo,
+                                       "account": self.account})
+            neighbor_list = []
+            for neighbor in neighbors:
+                neighbor_list.append(Todo(doc['headline'],
+                                        doc['line_number'],
+                                        doc['filepath'],
+                                        doc['text'],
+                                        doc['repo'],
+                                        doc['account'],
+                                        doc['committed_by']))
+
+            for n in neighbor_list:
+                if n.line_number > self.line_number:
+                    n.line_number+=-1
+                    n.put()
             print "Removing entry with id", self._id
