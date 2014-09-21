@@ -92,7 +92,7 @@ class Patch():
         new_idx = self.new_version_line_start - 2
         for line in self.new_version:
             if line[0]!="+" and self.containsTodo(line):
-                index = line.find("TODO")
+                index = self.findTodo(line)
                 todo_text = line[index:]
                 new_todo = Todo(headline=todo_text,
                                 line_number=new_idx,
@@ -104,7 +104,7 @@ class Patch():
 
         for line in self.old_version:
             if line[0]!="-" and self.containsTodo(line):
-                index = line.find("TODO")
+                index = self.findTodo(line)
                 todo_text = line[index:]
                 old_todo = Todo(headline=todo_text,
                                 line_number=old_idx,
@@ -127,7 +127,7 @@ class Patch():
         new_todo_dict = {}
         for line in self.new_version:
             if line[0]=="+" and self.containsTodo(line):
-                index = line.find("TODO")
+                index = self.findTodo(line)
                 todo_text = line[index:]
                 new_todo = Todo(headline=todo_text,
                                 line_number=idx,
@@ -143,7 +143,7 @@ class Patch():
         deleted_todo_dict = {}
         for line in self.old_version:
             if line[0]=="-" and self.containsTodo(line):
-                index = line.find("TODO")
+                index = self.findTodo(line)
                 todo_text = line[index:]
                 deleted_todo = Todo(headline=todo_text,
                                 line_number=idx,
@@ -156,5 +156,19 @@ class Patch():
         return deleted_todo_dict
 
     def containsTodo(self, line):
-        if "#TODO" in line:
-            return True
+        return bool(self.findTodo(line))
+
+    def findTodo(self, line):
+        stripped = line.lstrip()
+        commentseq = None
+        possibleseqs = ['#', '//'] # possible (one-line) comment starters
+        for seq in possibleseqs:
+            if stripped.startswith(seq):
+                commentseq = seq
+        if commentseq:
+            # slice off the comment, strip whitespace again, and check for TODO at the beginning
+            sliced = stripped[len(commentseq)].lstrip()
+            if sliced.startswith('TODO:'):
+                return len(line) - len(sliced)
+        return None;
+
