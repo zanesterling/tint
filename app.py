@@ -65,7 +65,6 @@ def clientCallback():
 def webhook():
 	payload = request.json
 	print payload
-# extraneous commment
 	return "" # TODO process the commits
 
 if __name__ == "__main__":
