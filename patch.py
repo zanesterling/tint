@@ -147,5 +147,15 @@ class Patch():
         return deleted_todo_dict
 
     def containsTodo(self, line):
-        if "#TODO" in line:
-            return True
+        stripped = line.strip()
+        commentseq = None
+        possibleseqs = ['#', '//'] # possible (one-line) comment starters
+        for seq in possibleseqs:
+            if stripped.startswith(seq):
+                commentseq = seq
+        if commentseq:
+            # slice off the comment, strip whitespace again, and check for TODO at the beginning
+            if stripped[len(commentseq):].strip().startswith('TODO:'):
+                return True
+        return False;
+
