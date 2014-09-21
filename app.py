@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from app_extension import *
+from commit_processor import Commit
 import requests as pyrequests
 import secrets
 import json
@@ -63,9 +64,11 @@ def clientCallback():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-	payload = request.json
-	print payload
-	return "" # TODO process the commits
+	payload = request.form['payload']
+	if payload['size'] <= 20:
+		for commit in payload['commits']:
+			Commit(commit['author']['name'], payload['repository']['name'], commit['id']).process()
+	return ""
 
 if __name__ == "__main__":
 	app.run("0.0.0.0", debug=True)
