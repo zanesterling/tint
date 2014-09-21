@@ -99,13 +99,13 @@ class Todo():
                                        "account": self.account})
             neighbor_list = []
             for neighbor in neighbors:
-                neighbor_list.append(Todo(doc['headline'],
-                                        doc['line_number'],
-                                        doc['filepath'],
-                                        doc['text'],
-                                        doc['repo'],
-                                        doc['account'],
-                                        doc['committed_by']))
+                neighbor_list.append(Todo(neighbor['headline'],
+                                        neighbor['line_number'],
+                                        neighbor['filepath'],
+                                        neighbor['text'],
+                                        neighbor['repo'],
+                                        neighbor['account'],
+                                        neighbor['committed_by']))
 
             for n in neighbor_list:
                 if n.line_number > self.line_number:
