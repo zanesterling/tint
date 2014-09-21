@@ -61,8 +61,10 @@ def clientCallback():
 
 	return '{"status": "success"}'
 
-@app.route('/webhook')
+@app.route('/webhook', methods=['POST'])
 def webhook():
+	payload = request.json
+	print payload
 	return "" # TODO process the commits
 
 if __name__ == "__main__":
