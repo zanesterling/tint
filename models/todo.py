@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import issues
 
 # initialize our database
 client = MongoClient()
@@ -11,6 +12,7 @@ class Todo():
     filepath = None
     text = None
     _id = None
+    issue_number = None
 
     def __repr__(self):
         return '''repo = %(repo)s
@@ -32,7 +34,8 @@ class Todo():
                  text=None,
                  repo=None,
                  account=None,
-                 committed_by=None):
+                 committed_by=None,
+                 issue_number=None):
         self.headline = headline
         self.line_number = line_number
         self.filepath = filepath
@@ -40,6 +43,7 @@ class Todo():
         self.repo = repo
         self.committed_by = committed_by
         self.account = account
+        self.issue_number = issue_number
 
     # Get and set for mongodb
     @staticmethod
@@ -63,19 +67,31 @@ class Todo():
 
     def put(self):
         """ Save this todo to the database in a form that Todo.get() """
-        doc = {"filepath": self.filepath,  \
-		"line_number": self.line_number,\
-		"text": self.text,			  \
-                "headline": self.headline,
-                "repo":self.repo,
-                "account":self.account,
-                "committed_by":self.committed_by}
+        doc = {"filepath": self.filepath,
+               "line_number": self.line_number,
+               "text": self.text,
+               "headline": self.headline,
+               "headline": self.headline,
+               "repo": self.repo,
+               "account": self.account,
+               "committed_by": self.committed_by}
         if not self._id:
+            issue = issues.Issue(title=self.headline,
+                                 body=self.text)
+
+            self.issue_number = issue.set(account=self.account, repo=self.repo)
+            doc["issue_number"]= self.issue_number
             self._id = db.todos.insert(doc)
+
         else:  # this doc exists already, update it
             db.todos.update({"_id": self._id}, {"$set": doc})
 
+
     def remove(self):
         if self._id:
+            number = db.todos.find_one({"_id": self._id}).issue_number
+            Issue.remove(issue_number=issue_number,
+                         account=self.account,
+                         repo=self.repo)
             db.todos.remove(self._id)
             print "Removing entry with id", self._id
