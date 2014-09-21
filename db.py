@@ -15,6 +15,9 @@ def updateUser(username, oauth_token):
 def getUser(username):
 	return db.users.find_one({'username': username})
 
+def getToken(username):
+	return getUser(username)['oauth_token']
+
 def userExists(username):
 	return bool(getUser(username))
 
