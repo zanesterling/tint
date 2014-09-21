@@ -81,3 +81,17 @@ body {
 .untinted > .reponame:after {
     content: " (Not Tinted)";
 }
+
+/* this repo is being untinted :( */
+
+.untinting {
+    background-color: orange;
+}
+
+.untinting:hover {
+    background-color: brown;
+}
+
+.untinting > .reponame:after {
+    content: " (Untinting)";
+}

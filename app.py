@@ -56,6 +56,9 @@ def logout():
 def clientCallback():
 	if request.args.get('action') == 'tint':
 		tintRepo(request.args['username'], session['oauth_token'], request.args['repo'])
+	if request.args.get('action') == 'untint':
+		untintRepo(request.args['username'], session['oauth_token'], request.args['repo'])
+
 	return '{"status": "success"}'
 
 @app.route('/webhook')

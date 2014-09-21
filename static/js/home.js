@@ -11,29 +11,41 @@ $(function() {
 	}
 
 	shownRepos.each(function (index, elt) {
-		console.log(elt);
 		if (!$(elt).hasClass('tinted')) {
 			$(elt).addClass('untinted');
 		}
 	});
 
 	$('.repo').click(function(event) {
-		if ($(event.target).hasClass('tinted'))
-			return;
-
-		a = event.target;
-		$(event.target).removeClass('untinted');
-		$(event.target).addClass('tinting');
-		$.get(window.location.origin + '/client-callback',
-			{
-				'action': 'tint',
-				'username': $('#username').text(),
-				'repo': $(event.target).text()
-			},
-			function() {
-				$(event.target).removeClass('tinting');
-				$(event.target).addClass('tinted');
-			}
-		);
+		targ = $(event.target);
+		if (targ.hasClass('untinted')) {
+			targ.removeClass('untinted');
+			targ.addClass('tinting');
+			$.get(window.location.origin + '/client-callback',
+				{
+					'action': 'tint',
+					'username': $('#username').text(),
+					'repo': targ.text()
+				},
+				function() {
+					targ.removeClass('tinting');
+					targ.addClass('tinted');
+				}
+			);
+		} else if (targ.hasClass('tinted')) {
+			targ.removeClass('tinted');
+			targ.addClass('untinting');
+			$.get(window.location.origin + '/client-callback',
+				{
+					'action': 'untint',
+					'username': $('#username').text(),
+					'repo': targ.text()
+				},
+				function() {
+					targ.removeClass('untinting');
+					targ.addClass('untinted');
+				}
+			);
+		} else console.log(targ);
 	});
 });
