@@ -85,7 +85,7 @@ class Todo():
 
         else:  # this doc exists already, update it
             db.todos.update({"_id": self._id}, {"$set": doc})
-
+            print "yay"
 
     def remove(self):
         if self._id:
