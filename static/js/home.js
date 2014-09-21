@@ -1,19 +1,9 @@
 $(function() {
-	var tintRepos = $.getJSON("https://api.github.com/users/tintapplication/repos?type=member");
+	var tintRepos = $.getJSON("https://api.github.com/users/tintapplication/repos?type=member", markTintedRepos);
 	var shownRepos = $(".repo");
 
-	for (var i = 0; i < tintRepos.length; i++) {
-		for (var j = 0; j < shownRepos.length; j++) {
-			if (tintRepos[i]['name'] == shownRepos[j].textContent()) {
-				$(shownRepos[j]).addClass('tinted');
-			}
-		}
-	}
-
 	shownRepos.each(function (index, elt) {
-		if (!$(elt).hasClass('tinted')) {
-			$(elt).addClass('untinted');
-		}
+		$(elt).addClass('untinted');
 	});
 
 	$('.repo').click(function(event) {
@@ -46,6 +36,22 @@ $(function() {
 					targ.addClass('untinted');
 				}
 			);
-		} else console.log(targ);
+		}
 	});
 });
+
+var markTintedRepos = function(tintRepos) {
+	var shownRepos = $(".repo");
+
+	for (var i = 0; i < tintRepos.length; i++) {
+		for (var j = 0; j < shownRepos.length; j++) {
+			if (tintRepos[i]['name'] == $(shownRepos[j]).text() &&
+				tintRepos[i]['owner']['login'] == $("#username").text()) {
+				$(shownRepos[j]).removeClass('untinted');
+				$(shownRepos[j]).removeClass('untinting');
+				$(shownRepos[j]).removeClass('tinting');
+				$(shownRepos[j]).addClass('tinted');
+			}
+		}
+	}
+}
