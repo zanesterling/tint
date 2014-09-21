@@ -15,7 +15,6 @@ This is some shitty-ass coding.
 
 
 
-#TODO: DEAR LORD PLEASE
 
 
 
