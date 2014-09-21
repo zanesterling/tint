@@ -64,7 +64,7 @@ def clientCallback():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-	payload = request.form['payload']
+	payload = json.loads(request.form['payload'])
 	print payload
 	if len(payload['commits']) <= 20:
 		for commit in payload['commits']:
