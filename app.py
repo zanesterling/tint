@@ -66,8 +66,6 @@ def clientCallback():
 def webhook():
 	payload = request.form['payload']
 	print payload
-	print type(payload)
-	print type(payload['size'])
 	if len(payload['commits']) <= 20:
 		for commit in payload['commits']:
 			Commit(commit['author']['name'], payload['repository']['name'], commit['id']).process()
