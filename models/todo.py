@@ -39,7 +39,7 @@ class Todo():
         self.text = text
         self.repo = repo
         self.committed_by = committed_by
-        self.account = acount
+        self.account = account
 
     # Get and set for mongodb
     @staticmethod
