@@ -59,7 +59,8 @@ class Todo():
                      doc['text'],
                      doc['repo'],
                      doc['account'],
-                     doc['committed_by'])
+                     doc['committed_by'],
+                     doc['issue_number'])
             t._id = doc['_id']
             return t
         else:
@@ -85,7 +86,7 @@ class Todo():
 
         else:  # this doc exists already, update it
             db.todos.update({"_id": self._id}, {"$set": doc})
-
+            print "yay"
 
     def remove(self):
         if self._id:
@@ -94,4 +95,23 @@ class Todo():
                          account=self.account,
                          repo=self.repo)
             db.todos.remove(self._id)
+            neighbors = db.todos.find({"filepath": self.filepath,
+                                       "repo": self.repo,
+                                       "account": self.account})
+            neighbor_list = []
+            for neighbor in neighbors:
+                new = Todo(neighbor['headline'],
+                        neighbor['line_number'],
+                        neighbor['filepath'],
+                        neighbor['text'],
+                        neighbor['repo'],
+                        neighbor['account'],
+                        neighbor['committed_by'],
+                        neighbor['issue_number'])
+                new._id = neighbor['_id']
+                neighbor_list.append(new)
+            for n in neighbor_list:
+                if n.line_number > self.line_number:
+                    n.line_number+=-1
+                    n.put()
             print "Removing entry with id", self._id

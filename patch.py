@@ -13,13 +13,11 @@ class Patch():
     committed_by = None
 
     def __init__(self, patch_text, filepath, repo, account, committed_by):
-        self.raw_patch = patch_text.replace("@@\n", "\nPatch begins\n")
-        self.raw_patch = self.raw_patch.replace('@@', '\nPatch begins\n').\
+        self.raw_patch = patch_text.replace('@@', '\nPatch begins\n').\
             split('\n')[2:]
 
         self.account = account
         self.committed_by = committed_by
-
         idx = 0
         for line in self.raw_patch:
             if len(line)==0:
@@ -27,12 +25,17 @@ class Patch():
                 self.raw_patch[idx] = line
             idx+=1
 
-        self.new_version = [l for l in self.raw_patch if line[0] != "-"]
-        self.old_version = [l for l in self.raw_patch if line[0] != "+"]
         self.old_version_line_start = int(self.raw_patch[0].replace("-", "").\
-            split(",")[0].strip(" "))
+            split(",")[0].strip(" "))-1
         self.new_version_line_start = int(self.raw_patch[0].replace("+", ",").\
-            split(",")[2])
+            split(",")[2])-1
+
+        start = self.raw_patch.index("Patch begins")
+        self.raw_patch = self.raw_patch[start+1:]
+        print self.raw_patch
+        self.new_version = [l for l in self.raw_patch if l[0] != "-"]
+        self.old_version = [l for l in self.raw_patch if l[0] != "+"]
+
         self.file_path = filepath
         self.repo = repo
 
@@ -88,8 +91,8 @@ class Patch():
         new_search = {}
         coupled_dict = {}
         #subtract 2 from line numbers because patch starts with patch metadata
-        old_idx = self.old_version_line_start - 2
-        new_idx = self.new_version_line_start - 2
+        old_idx = self.old_version_line_start
+        new_idx = self.new_version_line_start
         for line in self.new_version:
             if line[0]!="+" and self.containsTodo(line):
                 index = Patch.findTodo(line)
@@ -127,7 +130,7 @@ class Patch():
         return coupled_dict
 
     def findNewTodos(self):
-        idx = self.new_version_line_start - 2
+        idx = self.new_version_line_start
         new_todo_dict = {}
         for line in self.new_version:
             if line[0]=="+" and self.containsTodo(line):
@@ -145,7 +148,7 @@ class Patch():
         return new_todo_dict
 
     def findDeletedTodos(self):
-        idx = self.old_version_line_start - 2
+        idx = self.old_version_line_start
         deleted_todo_dict = {}
         for line in self.old_version:
             if line[0]=="-" and self.containsTodo(line):
