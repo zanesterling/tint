@@ -13,7 +13,7 @@ def getRepos(username, oauth_token):
 		attr = attr.split('=')
 		params[attr[0]] = attr[1]
 
-	r = requests.get('https://api.github.com/users/%s/repos' % username, params=params)
+	r = requests.get('https://api.github.com/user/repos' % username, params=params)
 	return json.loads(r.text)
 
 def tintRepo(username, oauth_token, reponame):
