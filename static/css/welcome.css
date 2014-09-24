@@ -75,3 +75,21 @@ body {
 #header {
 	margin: 20px;
 }
+
+#aboutbutton {
+	display: inline-block;
+	width: 100px;
+	height: 30px;
+	padding-top: calc(30px - 1em);
+	background-color: #4C4;
+	color: white;
+	text-decoration: none;
+	border-radius: 4px;
+	border: 1px solid grey;
+	transition: background-color 0.2s ease-out 0s;
+}
+
+#aboutbutton:hover {
+	background-color: #0B0;
+	transition: background-color 0.05s ease-out 0s;
+}
