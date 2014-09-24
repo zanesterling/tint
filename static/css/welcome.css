@@ -7,10 +7,6 @@ body {
 	width: 100%;
 }
 
-#header {
-	float: right;
-}
-
 #shoutbox {
 	height: 350px;
 	width: 500px;
@@ -70,10 +66,6 @@ body {
 	margin-left:20px;
 	margin-top: 25px;
 	display: block;
-}
-
-#header {
-	margin: 20px;
 }
 
 #aboutbutton {
