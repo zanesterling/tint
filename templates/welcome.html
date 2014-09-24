@@ -6,14 +6,17 @@
 	{% endif %}
 </head>
 <body>
+	<div id="header">
+	    <a href="/about">About</a>
+	</div>
 	<div id=container>
 		<div id=shoutbox>
-			<div id=shoutbox-in>
-                <div id=tintlogo><img width=250 src={{url_for('static', filename='img/tint_logo.png')}}/></div>
-                <div id=login>
-					<a id=ghbuttonlink href="https://github.com/login/oauth/authorize?scope=user:email,admin:repo_hook,repo&client_id={{ d['client_id'] }}">
+			<div id="shoutbox-in">
+                <div id="tintlogo"><img width=250 src={{url_for('static', filename='img/tint_logo.png')}}/></div>
+                <div id="login">
+					<a id="ghbuttonlink" href="https://github.com/login/oauth/authorize?scope=user:email,admin:repo_hook,repo&client_id={{ d['client_id'] }}">
 						<div id="ghbutton">
-							<div id=connecttext>
+							<div id="connecttext">
 								<img width=32 src={{url_for('static', filename='img/gh-logo.png')}}/><div>Connect to GitHub</div>
 							</div>
 						</div>

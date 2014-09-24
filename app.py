@@ -71,6 +71,10 @@ def webhook():
 			Commit(payload['repository']['owner']['name'], payload['repository']['name'], commit['id']).process()
 	return ""
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/easter/klingon')
 def klingon():
     if 'klingon' in session:
