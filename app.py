@@ -19,7 +19,7 @@ def home():
 
 	d['logged_in'] = True
 	d['username'] = session['username']
-	d['repos'] = getRepos(session['username'], session['oauth_token'])
+	d['repos'] = getRepos(session['oauth_token'])
 	return render_template("home.html", d=d)
 
 # process github's oauth callback and add user as necessary
