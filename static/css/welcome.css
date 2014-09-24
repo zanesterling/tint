@@ -67,3 +67,7 @@ body {
 	margin-top: 25px;
 	display: block;
 }
+
+#header {
+	margin: 20px;
+}
