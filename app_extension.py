@@ -3,9 +3,10 @@ import secrets
 import json
 import db
 
-def getRepos(username, oauth_token):
-	r = requests.get('https://api.github.com/user/repos?' + oauth_token)
-	return json.loads(r.text)
+def getRepos(oauth_token):
+	repos = json.loads(requests.get('https://api.github.com/user/repos?' + oauth_token).text)
+	repos = [rp for rp in repos if rp['permissions']['admin']]
+	return repos
 
 def tintRepo(username, oauth_token, reponame):
 	# add tint webhook
