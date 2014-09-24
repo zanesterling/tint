@@ -7,6 +7,10 @@ body {
 	width: 100%;
 }
 
+#header {
+	float: right;
+}
+
 #shoutbox {
 	height: 350px;
 	width: 500px;
