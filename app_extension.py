@@ -14,7 +14,7 @@ def tintRepo(username, oauth_token, reponame):
 	data['name'] = 'web'
 	data['active'] = True
 	data['events'] = ['push']
-	data['config'] = { "url": "http://104.131.55.76:5000/webhook", "content_type": "form" } # TODO
+	data['config'] = { "url": "http://tintmyco.de:5000/webhook", "content_type": "form" } # TODO
 	headers = {'content-type': 'application/json'}
 	requests.post('https://api.github.com/repos/%s/%s/hooks?%s' % (username, reponame, oauth_token),
 		          data=json.dumps(data), headers=headers)
@@ -25,10 +25,10 @@ def tintRepo(username, oauth_token, reponame):
 		         (username, reponame, oauth_token), headers=headers)
 
 def untintRepo(username, oauth_token, reponame):
-	# get id of tint webhook
+	# get rid of tint webhook
 	r = requests.get('https://api.github.com/repos/%s/%s/hooks?%s' % (username, reponame, oauth_token))
 	hooks = [hook['id'] for hook in json.loads(r.text)
-		     if hook['config']['url'] == 'http://104.131.55.76:5000/webhook']
+		     if hook['config']['url'] == 'http://tintmyco.de:5000/webhook']
 	if len(hooks):
 		hookid = hooks[0]
 
