@@ -3,7 +3,9 @@ from app_extension import *
 from commit_processor import Commit
 import requests as pyrequests
 import secrets
+import hmac
 import json
+import os
 import db
 
 app = Flask(__name__)
@@ -74,6 +76,20 @@ def webhook():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/pushpull', methods=['POST'])
+def pushpull():
+	h = hmac.new(os.environ['PUSHPULL_SCRT_KEY'], request.form['payload'])
+	hashedPayload = h.digest()
+
+	if hashedPayload != request.environ['HTTP_X_HUB_SIGNATURE']:
+		print "bad payload"
+		print request.environ
+		return 'bad payload'
+
+	payload = json.loads(request.form['payload'])
+	# TODO: b:feature-pushpull Check commits for branch, pull if master
+	return ''
 
 @app.route('/easter/klingon')
 def klingon():
