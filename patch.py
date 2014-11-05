@@ -181,6 +181,6 @@ class Patch():
         if commentseq:
             # slice off the comment, strip whitespace again, and check for TODO at the beginning
             sliced = stripped[len(commentseq):].lstrip()
-            if sliced.startswith('TODO:'):
+            if sliced.startswith('TODO'):
                 return (len(line) - len(sliced))
         return None;
