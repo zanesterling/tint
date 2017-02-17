@@ -16,7 +16,7 @@ class Commit():
                            commit_id=self.commit_id)
         committed_by = fs["commit"]["author"]["name"]
         for f in fs["files"]:
-            self.processFile(github_file=f, committed_by=committed_by)
+            self.processFile(f, committed_by)
 
     def getFiles(self, user=None, repo=None, commit_id=None):
         '''Grabs changed files using the github\
@@ -27,15 +27,14 @@ class Commit():
             % {"user": user,
                 "repo": repo,
                 "hash": commit_id,
-                "client_id": secrets.client_id,
-                "client_secret": secrets.client_secret}
+                "client_id": secrets.CLIENT_ID,
+                "client_secret": secrets.CLIENT_SECRET}
         print url
         request = requests.get(url)
         json_obj = json.loads(request.text)
         return json_obj
 
     def processFile(self, github_file, committed_by):
-        print github_file['patch']
         patch = Patch(patch_text=github_file['patch'],
                       filepath=github_file['filename'],
                       repo=self.repo,
@@ -47,6 +46,6 @@ class Commit():
 if __name__=="__main__":
     commit = Commit(user="shriken",
                     repo="tint",
-                    commit_id="ba7db45ee3cc821a20baebf89648e188ed023891")
+                    commit_id="c170680d71607b09d33069ab8b0c8dd22989d60c")
 
     commit.process()

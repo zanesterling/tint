@@ -2,42 +2,33 @@ from models.todo import Todo
 
 
 class Patch():
-    raw_patch = []
+    patch_lines = []
     old_version = []
     new_version = []
     filepath = ""
-    new_version_line_start = None
-    old_version_line_start = None
+    new_version_start_line = None
+    old_version_start_line = None
     repo = None
     account = None
     committed_by = None
 
     def __init__(self, patch_text, filepath, repo, account, committed_by):
-        self.raw_patch = patch_text.replace('@@', '\nPatch begins\n').\
-            split('\n')[2:]
-
         self.account = account
         self.committed_by = committed_by
-        idx = 0
-        for line in self.raw_patch:
-            if len(line)==0:
-                line = " "
-                self.raw_patch[idx] = line
-            idx+=1
-
-        self.old_version_line_start = int(self.raw_patch[0].replace("-", "").\
-            split(",")[0].strip(" "))-1
-        self.new_version_line_start = int(self.raw_patch[0].replace("+", ",").\
-            split(",")[2])-1
-
-        start = self.raw_patch.index("Patch begins")
-        self.raw_patch = self.raw_patch[start+1:]
-        print self.raw_patch
-        self.new_version = [l for l in self.raw_patch if l[0] != "-"]
-        self.old_version = [l for l in self.raw_patch if l[0] != "+"]
-
         self.file_path = filepath
         self.repo = repo
+
+        lines = patch_text.split('\n')
+        header_line = lines[0]
+        self.patch_lines = [l if len(l) > 0 else " " for l in lines[1:]]
+
+        # Convert from '@@ -1,2 +3,4 @@ ...' to [1,2,3,4].
+        header = header_line.split('@@')[1].strip(' -').replace('+', ',').split(',')
+        self.old_version_start_line = int(header[0])
+        self.new_version_start_line = int(header[2])
+
+        self.new_version = [l for l in self.patch_lines if l[0] != "-"]
+        self.old_version = [l for l in self.patch_lines if l[0] != "+"]
 
     def updateTodos(self):
         new_todos = self.findNewTodos()
@@ -47,8 +38,6 @@ class Patch():
         print new_todos
         print deleted_todos
         print coupled_todos
-
-
         for key in deleted_todos:
             ln = deleted_todos[key].line_number
             fp = deleted_todos[key].filepath
@@ -90,97 +79,103 @@ class Patch():
         old_search = {}
         new_search = {}
         coupled_dict = {}
-        #subtract 2 from line numbers because patch starts with patch metadata
-        old_idx = self.old_version_line_start
-        new_idx = self.new_version_line_start
-        for line in self.new_version:
-            if line[0]!="+" and self.containsTodo(line):
-                index = Patch.findTodo(line)
-                todo_text = line[index:]
-                new_todo = Todo(headline=todo_text,
-                                committed_by=self.committed_by,
-                                account = self.account,
-                                line_number=new_idx,
-                                filepath=self.file_path,
-                                text=todo_text,
-                                repo=self.repo)
-                new_search[new_idx] = new_todo
-            new_idx += 1
 
-        for line in self.old_version:
-            if line[0]!="-" and self.containsTodo(line):
-                index = Patch.findTodo(line)
+        #subtract 2 from line numbers because patch starts with patch metadata
+        for i, line in enumerate(self.new_version):
+            if line[0] != "+" and containsTodo(line):
+                index = findTodo(line)
                 todo_text = line[index:]
-                old_todo = Todo(headline=todo_text,
-                                committed_by=self.committed_by,
-                                account = self.account,
-                                line_number=old_idx,
-                                filepath=self.file_path,
-                                text=todo_text,
-                                repo=self.repo)
-                old_search[old_idx] = old_todo
-            old_idx += 1
+                line_num = self.new_version_start_line + i
+
+                new_todo = Todo(headline     = todo_text,
+                                committed_by = self.committed_by,
+                                account      = self.account,
+                                line_number  = line_num,
+                                filepath     = self.file_path,
+                                text         = todo_text,
+                                repo         = self.repo)
+                new_search[line_num] = new_todo
+
+        for i, line in enumerate(self.old_version):
+            if line[0] != "-" and containsTodo(line):
+                index = findTodo(line)
+                todo_text = line[index:]
+                line_num = self.old_version_start_line + i
+
+                new_todo = Todo(headline     = todo_text,
+                                committed_by = self.committed_by,
+                                account      = self.account,
+                                line_number  = line_num,
+                                filepath     = self.file_path,
+                                text         = todo_text,
+                                repo         = self.repo)
+                old_search[line_num] = old_todo
 
         for old_key in old_search:
             for new_key in new_search:
                 if old_search[old_key].headline == new_search[new_key].headline:
-                    coupled_dict[(old_key, new_key)] = \
-                        (old_search[old_key], new_search[new_key])
+                    coupled_dict[(old_key, new_key)] = (old_search[old_key], new_search[new_key])
 
         return coupled_dict
 
     def findNewTodos(self):
-        idx = self.new_version_line_start
-        new_todo_dict = {}
-        for line in self.new_version:
-            if line[0]=="+" and self.containsTodo(line):
-                index = Patch.findTodo(line)
+        new_todos = {}
+        for i, line in enumerate(self.new_version):
+            if line[0]=="+" and containsTodo(line):
+                index = findTodo(line)
                 todo_text = line[index:]
-                new_todo = Todo(headline=todo_text,
-                                committed_by=self.committed_by,
-                                account = self.account,
-                                line_number=idx,
-                                filepath=self.file_path,
-                                text=todo_text,
-                                repo=self.repo)
-                new_todo_dict[idx] = new_todo
-            idx += 1
-        return new_todo_dict
+                line_num = self.new_version_start_line + i
+
+                new_todo = Todo(headline     = todo_text,
+                                committed_by = self.committed_by,
+                                account      = self.account,
+                                line_number  = line_num,
+                                filepath     = self.file_path,
+                                text         = todo_text,
+                                repo         = self.repo)
+                new_todos[line_num] = new_todo
+
+        return new_todos
 
     def findDeletedTodos(self):
-        idx = self.old_version_line_start
-        deleted_todo_dict = {}
-        for line in self.old_version:
-            if line[0]=="-" and self.containsTodo(line):
-                index = Patch.findTodo(line)
+        deleted_todos = {}
+        for i, line in enumerate(self.new_version):
+            if line[0]=="-" and containsTodo(line):
+                index = findTodo(line)
                 todo_text = line[index:]
-                deleted_todo = Todo(headline=todo_text,
-                                    committed_by=self.committed_by,
-                                    account = self.account,
-                                    line_number=idx,
-                                    filepath=self.file_path,
-                                    text=todo_text,
-                                    repo=self.repo
-                                    )
-                deleted_todo_dict[idx] = deleted_todo
-            idx+=1
-        return deleted_todo_dict
+                line_num = self.old_version_start_line + i
 
-    @staticmethod
-    def containsTodo(line):
-        return bool(Patch.findTodo(line))
+                new_todo = Todo(headline     = todo_text,
+                                committed_by = self.committed_by,
+                                account      = self.account,
+                                line_number  = line_num,
+                                filepath     = self.file_path,
+                                text         = todo_text,
+                                repo         = self.repo)
+                new_todos[line_num] = new_todo
 
-    @staticmethod
-    def findTodo(line):
-        stripped = line[1:].lstrip()
-        commentseq = None
-        possibleseqs = ['#', '//'] # possible (one-line) comment starters
-        for seq in possibleseqs:
-            if stripped.startswith(seq):
-                commentseq = seq
-        if commentseq:
-            # slice off the comment, strip whitespace again, and check for TODO at the beginning
-            sliced = stripped[len(commentseq):].lstrip()
-            if sliced.startswith('TODO'):
-                return (len(line) - len(sliced))
-        return None;
+        return deleted_todos
+
+def containsTodo(line):
+    return bool(findTodo(line))
+
+def findTodo(line):
+    stripped = line[1:].lstrip()
+    commentseq = None
+    possibleseqs = ['#', '//'] # possible (one-line) comment starters
+    for seq in possibleseqs:
+        if stripped.startswith(seq):
+            commentseq = seq
+    if commentseq:
+        # slice off the comment, strip whitespace again, and check for TODO at the beginning
+        sliced = stripped[len(commentseq):].lstrip()
+        if sliced.startswith('TODO'):
+            return (len(line) - len(sliced))
+    return None;
+
+
+def test_parser():
+    pass
+
+if __name__ == '__main__':
+    test_parser()
