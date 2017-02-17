@@ -3,9 +3,16 @@ import secrets
 import json
 import db
 
-def getRepos(oauth_token):
-	repos = json.loads(requests.get('https://api.github.com/user/repos?' + oauth_token).text)
-	repos = [rp for rp in repos if rp['permissions']['admin']]
+def getRepos(oauth_token, page=1):
+	repos = []
+	while len(repos) == 0:
+		repos = json.loads(requests.get('https://api.github.com/user/repos?page=%s&' % page + oauth_token).text)
+		repos = [rp for rp in repos if rp['permissions']['admin']]
+
+		page -= 1
+		if page < 1:
+			break
+
 	return repos
 
 def tintRepo(username, oauth_token, reponame):

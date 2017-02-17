@@ -12,22 +12,23 @@ app.secret_key = "blerp derp"
 @app.route('/', methods=['GET', 'POST'])
 def home():
 	d = {}
-	d['client_id'] = secrets.client_id
+	d['client_id'] = secrets.CLIENT_ID
 	if not 'oauth_token' in session:
 		d['logged_in'] = False
 		return render_template("welcome.html", d=d)
 
 	d['logged_in'] = True
 	d['username'] = session['username']
-	d['repos'] = getRepos(session['oauth_token'])
+	d['repos'] = getRepos(session['oauth_token'], int(request.args.get('page', 1)))
+	print [r['name'] for r in d['repos']]
 	return render_template("home.html", d=d)
 
 # process github's oauth callback and add user as necessary
-@app.route('/oauth-callback')
+@app.route('/github-callback')
 def oauth_callback():
 	data = {}
-	data["client_id"] = secrets.client_id
-	data["client_secret"] = secrets.client_secret
+	data["client_id"] = secrets.CLIENT_ID
+	data["client_secret"] = secrets.CLIENT_SECRET
 	data["code"] = request.args.get("code")
 	oauth_token = pyrequests.post('https://github.com/login/oauth/access_token', data).text
 
@@ -74,6 +75,7 @@ def webhook():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 @app.route('/easter/klingon')
 def klingon():
