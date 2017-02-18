@@ -6,7 +6,7 @@ import db
 def getRepos(oauth_token, page=1):
 	repos = []
 	while len(repos) == 0:
-		repos = json.loads(requests.get('https://api.github.com/user/repos?page=%s&' % page + oauth_token).text)
+		repos = json.loads(requests.get('https://api.github.com/user/repos?page=%s&sort=updated&affiliation=owner&' % page + oauth_token).text)
 		repos = [rp for rp in repos if rp['permissions']['admin']]
 
 		page -= 1

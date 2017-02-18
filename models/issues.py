@@ -31,8 +31,7 @@ class Issue():
                    'assignee': self.assignee,
                    'labels': self.labels}
         response = requests.post(url, data=json.dumps(payload))
-        number = json.loads(response.text)['number']
-        return number
+        return json.loads(response.text)['number']
 
     @staticmethod
     def remove(issue_number, account, repo):

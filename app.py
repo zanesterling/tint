@@ -19,9 +19,10 @@ def home():
 
 	d['logged_in'] = True
 	d['username'] = session['username']
-	d['repos'] = getRepos(session['oauth_token'], int(request.args.get('page', 1)))
+	page = int(request.args.get('page', 1))
+	d['repos'] = getRepos(session['oauth_token'], page)
 	print [r['name'] for r in d['repos']]
-	return render_template("home.html", d=d)
+	return render_template("home.html", d=d, min_page=1, page_num=page, max_page=100)
 
 # process github's oauth callback and add user as necessary
 @app.route('/github-callback')
