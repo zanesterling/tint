@@ -15,7 +15,7 @@ def getRepos(oauth_token, page=1):
 
 	return repos
 
-def tintRepo(username, oauth_token, reponame):
+def tintRepo(oauth_token, reponame):
 	# add tint webhook
 	data = {}
 	data['name'] = 'web'
@@ -23,28 +23,30 @@ def tintRepo(username, oauth_token, reponame):
 	data['events'] = ['push']
 	data['config'] = { "url": "http://tintmyco.de:5000/webhook", "content_type": "form" } # TODO
 	headers = {'content-type': 'application/json'}
-	requests.post('https://api.github.com/repos/%s/%s/hooks?%s' % (username, reponame, oauth_token),
+	requests.post('https://api.github.com/repos/%s/hooks?%s' % (reponame, oauth_token),
 		          data=json.dumps(data), headers=headers)
 
 	# add tintapplication as collaborator
 	headers = {'Content-Length': 0}
-	requests.put('https://api.github.com/repos/%s/%s/collaborators/tintapplication?%s' %
-		         (username, reponame, oauth_token), headers=headers)
+	requests.put('https://api.github.com/repos/%s/collaborators/tintapplication?%s' %
+		         (reponame, oauth_token), headers=headers)
 
-def untintRepo(username, oauth_token, reponame):
+def untintRepo(oauth_token, full_reponame):
 	# get rid of tint webhook
-	r = requests.get('https://api.github.com/repos/%s/%s/hooks?%s' % (username, reponame, oauth_token))
-	hooks = [hook['id'] for hook in json.loads(r.text)
-		     if hook['config']['url'] == 'http://tintmyco.de:5000/webhook']
-	if len(hooks):
-		hookid = hooks[0]
+	r = requests.get('https://api.github.com/repos/%s/hooks?%s' % (full_reponame, oauth_token))
+	json_result = json.loads(r.text)
+	if isinstance(json_result, list):
+		hooks = [hook['id'] for hook in json_result if hook['config']['url'] == 'http://tintmyco.de:5000/webhook']
+		if len(hooks):
+			hookid = hooks[0]
 
-		# remove tint webhook
-		headers = {'Content-Length': 0}
-		requests.delete('https://api.github.com/repos/%s/%s/hooks/%i?%s' %
-			            (username, reponame, hookid, oauth_token), headers=headers)
+			# remove tint webhook
+			headers = {'Content-Length': 0}
+			requests.delete('https://api.github.com/repos/%s/hooks/%i?%s' %
+			            	(full_reponame, hookid, oauth_token), headers=headers)
 
-	# add tintapplication as collaborator
+	# remove tintapplication as collaborator
 	headers = {'Content-Length': 0}
-	requests.delete('https://api.github.com/repos/%s/%s/collaborators/tintapplication?%s' %
-		            (username, reponame, oauth_token), headers=headers)
+	collab_url = 'https://api.github.com/repos/%s/collaborators/tintapplication?%s' % (full_reponame, oauth_token)
+	r = requests.delete(collab_url, headers=headers)
+	print r.text
